@@ -1,4 +1,5 @@
 import { Component, VERSION } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Component({
@@ -8,15 +9,21 @@ import { ApiService } from './api.service';
 })
 export class AppComponent {
   name = 'Angular ' + VERSION.major;
-
   users: any;
+  subscriptionState: Array<Boolean> = [];
+  observer: Subscription;
 
   constructor(private api: ApiService) {}
 
   ngOnInit() {
-    this.api.get('users?page=1').subscribe(res => {
+    this.observer = this.api.get('users?page=1').subscribe(res => {
       this.users = res;
       console.log('data response', this.users);
+      this.subscriptionState.push(this.observer.closed);
     });
+
+    setInterval(() => {
+      this.subscriptionState.push(this.observer.closed);
+    }, 5000);
   }
 }
