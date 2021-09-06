@@ -21,14 +21,14 @@ export class AppComponent {
       console.log('data response', this.users);
       this.subscriptionState.push(this.observer.closed);
     });
+
     let inc = 0;
     const timer = setInterval(() => {
-      inc++;
       this.subscriptionState.push(this.observer.closed);
-
       if (inc > 5) {
         clearInterval(timer);
       }
-    }, 5000);
+      inc++;
+    }, 2000);
   }
 }
